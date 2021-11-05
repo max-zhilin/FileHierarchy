@@ -3,6 +3,7 @@ import java.io.File
 fun main() {
     maxFiles()
     maxDepth()
+    emptyDirs()
 }
 
 private fun maxFiles() {
@@ -49,3 +50,21 @@ fun howDeep(file: File): Pair<Int, String> {
 fun <F, S, R> with(receiver: Pair<F, S>, block: Pair<F, S>.(F, S) -> R) =
     receiver.block(receiver.first, receiver.second)
 
+fun emptyDirs() {
+    val dirList = mutableListOf<String>()
+    findEmpty(File("D:\\Projects\\JetBrainsAcademy\\FileHierarchy\\basedir3"), dirList)
+
+    println(dirList.joinToString(" "))
+}
+
+fun findEmpty(file: File, dirList: MutableList<String>) {
+    if (file.isDirectory)
+        file.listFiles()?.let { fileList ->
+            if (fileList.isEmpty())
+                dirList.add(file.name)
+            else
+                fileList.forEach { subFile ->
+                    findEmpty(subFile, dirList)
+                }
+        }
+}
